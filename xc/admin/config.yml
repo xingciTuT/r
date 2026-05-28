@@ -1,0 +1,46 @@
+# Decap CMS Configuration
+#
+# After deploying to GitHub Pages, set up a GitHub OAuth App:
+# 1. GitHub → Settings → Developer settings → OAuth Apps → New
+# 2. Homepage:  https://YOUR_USERNAME.github.io/resource-site
+# 3. Callback:  https://api.decapcms.org/auth/github/callback
+# 4. Deploy the OAuth gateway proxy (Netlify / Vercel / Cloudflare Worker)
+#    See: https://decapcms.org/docs/oauth-provider-token/
+#
+# Local dev: change backend.name to "test-repo" to skip auth.
+
+backend:
+  name: github
+  repo: yourusername/resource-site   # ← CHANGE THIS
+  branch: main
+
+media_folder: "assets/images"
+public_folder: "/assets/images"
+
+collections:
+  - name: "resources"
+    label: "Resources"
+    label_singular: "Resource"
+    folder: "resources"
+    create: true
+    identifier_field: "title_en"
+    slug: "{{slug}}"
+    extension: "json"
+    format: "json"
+    editor:
+      preview: false
+    fields:
+      - { label: "Title (EN)",     name: "title_en", widget: "string", required: false,
+          hint: "Displayed when the site language is set to English." }
+      - { label: "Description (EN)", name: "desc_en", widget: "text", required: false }
+      - { label: "Title (ZH)",     name: "title_zh", widget: "string", required: false,
+          hint: "Displayed when the site language is set to Chinese." }
+      - { label: "Description (ZH)", name: "desc_zh", widget: "text", required: false }
+      - { label: "URL",            name: "url",      widget: "string" }
+      - { label: "Category",       name: "category", widget: "select",
+          options: ["tools", "library", "article", "video", "course", "other"] }
+      - { label: "Icon",           name: "icon",     widget: "string", default: "🔗",
+          hint: "Emoji or single character" }
+      - { label: "Tags",           name: "tags",     widget: "list",
+          field: { label: "Tag", name: "tag", widget: "string" } }
+      - { label: "Featured",       name: "featured", widget: "boolean", default: false, required: false }

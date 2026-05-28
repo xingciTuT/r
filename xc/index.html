@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resource Hub</title>
+  <meta name="description" content="Curated resources, tools & references">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>◆</text></svg>">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo"><span data-i18n="nav_brand">Resource Hub</span></a>
+      <div class="nav-actions">
+        <button class="nav-btn" id="langToggle" aria-label="Switch language" data-i18n-title="nav_lang">中</button>
+        <button class="nav-btn" id="themeToggle" aria-label="Toggle theme" data-i18n-title="nav_theme">
+          <svg class="icon-sun"  width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="main">
+    <!-- Hero — compact, typographic -->
+    <header class="hero">
+      <div class="hero-inner">
+        <p class="hero-label" data-i18n="hero_label">Index</p>
+        <h1 class="hero-title" data-i18n="hero_title">Collections</h1>
+      </div>
+    </header>
+
+    <!-- Sub-bar: search + count in one row -->
+    <section class="bar">
+      <div class="bar-inner">
+        <div class="search-box">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" id="searchInput" data-i18n-placeholder="search_ph" placeholder="Search…" autocomplete="off">
+        </div>
+        <div class="bar-meta">
+          <span id="itemCount">0</span> <span data-i18n="count_text">resources</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filter row -->
+    <nav class="filters" id="filterTags"></nav>
+
+    <!-- Resource list (not card grid!) -->
+    <main class="list" id="resourceList"></main>
+
+    <div class="list-empty" id="listEmpty" hidden data-i18n="empty_text">No resources found.</div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p data-i18n="footer_line1">Curated by hand · Always up to date</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

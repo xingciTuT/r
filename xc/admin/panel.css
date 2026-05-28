@@ -1,0 +1,394 @@
+/* ============================================
+   Admin Panel — Layout & Design
+   ============================================ */
+
+/* --- Reset --- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 14px; -webkit-font-smoothing: antialiased; }
+body.admin-body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  background: #f5f3f0;
+  color: #1a1a18;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+[data-theme="dark"] body.admin-body {
+  background: #0f0f0e;
+  color: #e2dfda;
+}
+
+/* --- Top bar --- */
+.admin-topbar {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  border-bottom: 1px solid #e3dfd9;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(12px) saturate(1.6);
+  -webkit-backdrop-filter: blur(12px) saturate(1.6);
+  z-index: 100;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .admin-topbar {
+  background: rgba(22,22,20,0.75);
+  border-bottom-color: #252420;
+}
+
+.admin-logo {
+  font-size: 13px;
+  font-weight: 600;
+  color: inherit;
+}
+.admin-logo:hover { color: #d96b3a; }
+
+.admin-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-git-status {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #888;
+}
+
+/* --- Buttons --- */
+.admin-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 500;
+  border: 1px solid #ddd8cf;
+  background: #fff;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.admin-btn:hover { background: #f7f5f2; border-color: #ccc6bb; }
+
+.admin-btn-primary {
+  background: #d96b3a;
+  color: #fff;
+  border-color: #d96b3a;
+}
+
+.admin-btn-primary:hover { background: #c55d2e; border-color: #c55d2e; }
+
+.admin-btn-danger {
+  color: #c0392b;
+  border-color: #e8d6d4;
+}
+
+.admin-btn-danger:hover { background: #fdf0ee; }
+
+.admin-btn-ghost {
+  border-color: transparent;
+  background: none;
+  color: #888;
+}
+
+.admin-btn-ghost:hover { background: rgba(0,0,0,0.04); }
+
+.admin-btn-text {
+  background: none;
+  border: none;
+  color: #d96b3a;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background 0.15s ease;
+}
+
+.admin-btn-text:hover { background: rgba(217,107,58,0.08); }
+
+/* --- Layout --- */
+.admin-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* --- Sidebar --- */
+.admin-sidebar {
+  width: 280px;
+  border-right: 1px solid #e3dfd9;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.5);
+  overflow: hidden;
+}
+
+[data-theme="dark"] .admin-sidebar {
+  background: rgba(25,24,22,0.5);
+  border-right-color: #252420;
+}
+
+.admin-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid #ebe7e0;
+}
+
+[data-theme="dark"] .admin-sidebar-header { border-bottom-color: #1f1e1b; }
+
+.admin-sidebar-header h2 {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #999;
+}
+
+.admin-list {
+  list-style: none;
+  overflow-y: auto;
+  flex: 1;
+  padding: 4px 0;
+}
+
+.admin-list-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #444;
+  border-left: 2px solid transparent;
+  transition: all 0.12s ease;
+}
+
+.admin-list-item:hover {
+  background: rgba(0,0,0,0.03);
+  color: #222;
+}
+
+.admin-list-item.active {
+  background: rgba(217,107,58,0.06);
+  border-left-color: #d96b3a;
+  color: #d96b3a;
+  font-weight: 500;
+}
+
+[data-theme="dark"] .admin-list-item { color: #aaa; }
+[data-theme="dark"] .admin-list-item:hover { color: #ddd; }
+[data-theme="dark"] .admin-list-item.active { color: #e87d4c; }
+
+.admin-list-icon { font-size: 15px; flex-shrink: 0; }
+.admin-list-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.admin-sidebar-footer {
+  padding: 10px 16px;
+  border-top: 1px solid #ebe7e0;
+}
+
+[data-theme="dark"] .admin-sidebar-footer { border-top-color: #1f1e1b; }
+
+.admin-hint {
+  font-size: 11px;
+  color: #aaa;
+}
+
+/* --- Main form area --- */
+.admin-main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px 40px;
+}
+
+.admin-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #999;
+  font-size: 14px;
+}
+
+.admin-form { max-width: 680px; }
+
+.admin-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.admin-form-grid-3 {
+  grid-template-columns: 1fr 1fr auto;
+  align-items: end;
+}
+
+.admin-fieldset {
+  border: 1px solid #e3dfd9;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+[data-theme="dark"] .admin-fieldset { border-color: #2a2824; }
+
+.admin-fieldset legend {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #d96b3a;
+  padding: 0 6px;
+}
+
+[data-theme="dark"] .admin-fieldset legend { color: #e87d4c; }
+
+.admin-label {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #888;
+  margin-bottom: 5px;
+  margin-top: 12px;
+}
+
+.admin-label:first-of-type { margin-top: 0; }
+
+.admin-input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ddd8cf;
+  border-radius: 6px;
+  font-size: 13px;
+  background: #fff;
+  color: #222;
+  transition: border-color 0.15s ease;
+  font-family: inherit;
+}
+
+.admin-input:focus { outline: none; border-color: #d96b3a; box-shadow: 0 0 0 3px rgba(217,107,58,0.1); }
+
+[data-theme="dark"] .admin-input {
+  background: #1a1918;
+  border-color: #333;
+  color: #ddd;
+}
+
+[data-theme="dark"] .admin-input:focus { border-color: #e87d4c; box-shadow: 0 0 0 3px rgba(232,125,76,0.1); }
+
+.admin-textarea { resize: vertical; min-height: 60px; }
+
+.admin-input-icon { text-align: center; }
+
+.admin-form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid #e3dfd9;
+}
+
+[data-theme="dark"] .admin-form-actions { border-top-color: #252420; }
+
+.admin-form-actions-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* --- Overlay / Dialog --- */
+.admin-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-overlay[hidden] { display: none; }
+
+.admin-dialog {
+  background: #fff;
+  border-radius: 12px;
+  padding: 28px;
+  max-width: 520px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+[data-theme="dark"] .admin-dialog { background: #1a1918; }
+
+.admin-dialog h3 { font-size: 15px; font-weight: 600; margin-bottom: 16px; }
+
+.admin-log {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  background: #111;
+  color: #8f8;
+  padding: 16px;
+  border-radius: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.admin-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+/* --- Toast --- */
+.admin-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 300;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  background: #1a1a18;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  transform: translateY(12px);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.admin-toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.admin-toast.error { background: #c0392b; }
+.admin-toast.success { background: #27ae60; }
+
+/* --- Scrollbar --- */
+.admin-list::-webkit-scrollbar,
+.admin-main::-webkit-scrollbar { width: 5px; }
+
+.admin-list::-webkit-scrollbar-thumb,
+.admin-main::-webkit-scrollbar-thumb { background: #d6d1c8; border-radius: 3px; }
+
+[data-theme="dark"] .admin-list::-webkit-scrollbar-thumb,
+[data-theme="dark"] .admin-main::-webkit-scrollbar-thumb { background: #333; }

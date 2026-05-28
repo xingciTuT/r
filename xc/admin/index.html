@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理面板 — Resource Hub</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/admin/panel.css">
+</head>
+<body class="admin-body">
+  <header class="admin-topbar">
+    <a href="/" class="admin-logo">← 资源站</a>
+    <div class="admin-topbar-right">
+      <span class="admin-git-status" id="gitStatus">—</span>
+      <button class="admin-btn admin-btn-primary" id="btnDeploy">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+        部署
+      </button>
+    </div>
+  </header>
+
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="admin-sidebar-header">
+        <h2>资源列表</h2>
+        <button class="admin-btn-text" id="btnAdd">+ 新建</button>
+      </div>
+      <ul class="admin-list" id="resourceList"></ul>
+      <div class="admin-sidebar-footer">
+        <p class="admin-hint">可拖拽调整顺序</p>
+      </div>
+    </aside>
+
+    <main class="admin-main">
+      <div class="admin-empty" id="emptyState">
+        <p>从左侧选择一个资源，或点击「新建」添加。</p>
+      </div>
+
+      <form class="admin-form" id="editForm" hidden>
+        <div class="admin-form-grid">
+          <fieldset class="admin-fieldset">
+            <legend>English</legend>
+            <label class="admin-label">标题</label>
+            <input class="admin-input" name="title_en" placeholder="e.g. Tailwind CSS">
+            <label class="admin-label">描述</label>
+            <textarea class="admin-input admin-textarea" name="desc_en" rows="3" placeholder="Short description…"></textarea>
+          </fieldset>
+          <fieldset class="admin-fieldset">
+            <legend>中文</legend>
+            <label class="admin-label">标题</label>
+            <input class="admin-input" name="title_zh" placeholder="如：Tailwind CSS">
+            <label class="admin-label">描述</label>
+            <textarea class="admin-input admin-textarea" name="desc_zh" rows="3" placeholder="简短描述…"></textarea>
+          </fieldset>
+        </div>
+
+        <div class="admin-form-grid admin-form-grid-3">
+          <div>
+            <label class="admin-label">链接</label>
+            <input class="admin-input" name="url" placeholder="https://…">
+          </div>
+          <div>
+            <label class="admin-label">分类</label>
+            <select class="admin-input" name="category">
+              <option value="tools">Tools 工具</option>
+              <option value="library">Library 库</option>
+              <option value="article">Article 文章</option>
+              <option value="video">Video 视频</option>
+              <option value="course">Course 课程</option>
+              <option value="other">Other 其他</option>
+            </select>
+          </div>
+          <div>
+            <label class="admin-label">图标</label>
+            <input class="admin-input admin-input-icon" name="icon" placeholder="🎯" maxlength="4" style="font-size:20px;text-align:center;width:64px;">
+          </div>
+        </div>
+
+        <div>
+          <label class="admin-label">标签（逗号分隔）</label>
+          <input class="admin-input" name="tags_str" placeholder="css, frontend, design">
+        </div>
+
+        <div class="admin-form-actions">
+          <div class="admin-form-actions-left">
+            <input type="hidden" name="file">
+            <button type="submit" class="admin-btn admin-btn-primary" id="btnSave">保存</button>
+            <button type="button" class="admin-btn admin-btn-danger" id="btnDelete" hidden>删除</button>
+          </div>
+          <a href="/" target="_blank" class="admin-btn admin-btn-ghost">预览 →</a>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <div class="admin-overlay" id="deployOverlay" hidden>
+    <div class="admin-dialog">
+      <h3>正在部署到 GitHub Pages</h3>
+      <pre class="admin-log" id="deployLog"></pre>
+      <div class="admin-dialog-actions">
+        <button class="admin-btn admin-btn-ghost" id="btnCloseOverlay">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-toast" id="toast"></div>
+
+  <script src="/admin/panel.js"></script>
+</body>
+</html>
