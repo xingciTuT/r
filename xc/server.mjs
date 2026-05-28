@@ -20,6 +20,19 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT       = __dirname;
 const RESOURCES  = join(ROOT, 'resources');
 const PORT       = parseInt(process.env.PORT || process.argv.find((_,i,a) => a[i-1] === '--port') || '8787', 10);
+const PASSWORD   = process.env.ADMIN_PASSWORD || 'admin888';
+
+// Simple in-memory session store
+const sessions   = new Set();
+function makeToken() { return Math.random().toString(36).slice(2) + Date.now().toString(36); }
+function getCookie(req, name) {
+  const raw = req.headers.cookie || '';
+  const m = raw.match(new RegExp(`${name}=([^;]+)`));
+  return m ? m[1] : null;
+}
+function isAuthed(req) {
+  return sessions.has(getCookie(req, 'admin_token') || '');
+}
 
 const MIME = {
   '.html': 'text/html; charset=utf-8',
@@ -198,6 +211,65 @@ async function handle(req, res) {
   const pathname = url.pathname;
   const method   = req.method;
 
+  // ── Auth ──
+  // Login page
+  if (pathname === '/admin/login' && method === 'GET') {
+    res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
+    res.end(`<!DOCTYPE html>
+<html lang="zh"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>登录 — 管理面板</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,sans-serif;background:#0f0e0d;color:#e8e4df;height:100vh;display:flex;align-items:center;justify-content:center}
+  .box{width:320px;padding:40px 32px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:12px;backdrop-filter:blur(16px)}
+  h1{font-size:18px;font-weight:600;margin-bottom:24px;text-align:center}
+  input{width:100%;padding:10px 12px;margin-bottom:16px;border:1px solid rgba(255,255,255,0.12);border-radius:8px;background:rgba(255,255,255,0.04);color:#e8e4df;font-size:14px;outline:none;transition:border-color .15s}
+  input:focus{border-color:#e87d4c}
+  input::placeholder{color:#666}
+  button{width:100%;padding:10px;border:none;border-radius:8px;background:#e87d4c;color:#fff;font-size:14px;font-weight:600;cursor:pointer;transition:background .15s}
+  button:hover{background:#d96b3a}
+  .err{color:#e74c3c;font-size:12px;margin-bottom:12px;text-align:center}
+</style></head><body>
+<div class="box"><h1>🔒 管理面板登录</h1>
+<form method="POST" action="/admin/login"><input name="password" type="password" placeholder="请输入密码" autofocus/><button type="submit">登录</button></form>
+<p id="err" class="err" style="display:none">密码错误，请重试</p>
+<script>if(location.search==='?err=1')document.getElementById('err').style.display='block';</script>
+</div></body></html>`);
+    return;
+  }
+  // Login POST
+  if (pathname === '/admin/login' && method === 'POST') {
+    const body = await readBody(req);
+    const params = new URLSearchParams(body);
+    const pwd = params.get('password') || '';
+    if (pwd === PASSWORD) {
+      const token = makeToken();
+      sessions.add(token);
+      res.writeHead(302, { 'Set-Cookie': `admin_token=${token}; Path=/admin; HttpOnly; SameSite=Strict`, 'Location': '/admin/' });
+      res.end();
+    } else {
+      res.writeHead(302, { 'Location': '/admin/login?err=1' });
+      res.end();
+    }
+    return;
+  }
+  // Logout
+  if (pathname === '/admin/logout') {
+    const token = getCookie(req, 'admin_token');
+    if (token) sessions.delete(token);
+    res.writeHead(302, { 'Location': '/admin/login', 'Set-Cookie': 'admin_token=; Path=/admin; HttpOnly; Max-Age=0' });
+    res.end();
+    return;
+  }
+  // Auth guard for /admin/* (except /admin/login)
+  if (pathname.startsWith('/admin/') && pathname !== '/admin/login') {
+    if (!isAuthed(req)) {
+      res.writeHead(302, { 'Location': '/admin/login' });
+      res.end();
+      return;
+    }
+  }
+
   try {
     // ── API Routes ──
 
@@ -289,6 +361,6 @@ server.listen(PORT, () => {
   console.log('');
   console.log('  ✦ Resource Hub — Local Admin');
   console.log(`  ├─ Site:   http://localhost:${PORT}/`);
-  console.log(`  └─ Admin:  http://localhost:${PORT}/admin/panel.html`);
+  console.log(`  └─ Admin:  http://localhost:${PORT}/admin/  (password: ${PASSWORD ? '••••' : 'none'})`);
   console.log('');
 });

@@ -1,0 +1,13 @@
+{
+  "title_en": "my blog",
+  "desc_en": "my blog",
+  "title_zh": "我的个人博客",
+  "desc_zh": "我的个人博客",
+  "url": "https://xingci.cyou",
+  "category": "library",
+  "icon": "🔗",
+  "tags": [
+    "blog"
+  ],
+  "featured": false
+}

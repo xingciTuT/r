@@ -18,6 +18,7 @@ const I18N = {
     count_text:    '个资源',
     empty_text:    '没有找到匹配的资源。',
     footer_line1:  '精心筛选 · 持续更新',
+    visit:         '访问网站',
     meta_url:      '', // url just shown as-is
   },
   en: {
@@ -38,6 +39,7 @@ const I18N = {
     count_text:    'resources',
     empty_text:    'No resources matched your criteria.',
     footer_line1:  'Curated by hand · Always up to date',
+    visit:         'Visit',
     meta_url:      '',
   }
 };

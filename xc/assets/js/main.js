@@ -13,6 +13,46 @@ const state = {
 // Track previous count for pulse animation
 let prevCount = 0;
 
+// ── Modal ──────────────────────────────────
+let currentResource = null;
+
+function showDetail(r) {
+  currentResource = r;
+  const body   = document.getElementById('modalBody');
+  const { title, desc } = rText(r, state.lang);
+  let host;
+  try { host = new URL(r.url).hostname.replace('www.', ''); } catch { host = r.url; }
+
+  body.innerHTML = `
+    <span class="modal-icon">${esc(r.icon)}</span>
+    <div class="modal-title">${esc(title)}</div>
+    <div class="modal-subtitle">${host}</div>
+    <div class="modal-desc">${esc(desc)}</div>
+    <div class="modal-meta">
+      <span class="modal-badge">${catLabel(r.category)}</span>
+    </div>
+    <div class="modal-tags">
+      ${(r.tags || []).map(t => `<span class="modal-tag">${esc(t)}</span>`).join('')}
+    </div>
+    <div class="modal-link-row">
+      <a class="modal-visit" href="${esc(r.url)}" target="_blank" rel="noopener noreferrer">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        ${t('visit')}
+      </a>
+      <span class="modal-host">${esc(host)}</span>
+    </div>
+  `;
+
+  document.getElementById('detailModal').hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+
+function hideDetail() {
+  document.getElementById('detailModal').hidden = true;
+  document.body.style.overflow = '';
+  currentResource = null;
+}
+
 // ── Init ───────────────────────────────────
 function init() {
   applyLang(state.lang);
@@ -183,7 +223,7 @@ function render() {
     try { host = new URL(r.url).hostname.replace('www.', ''); } catch { host = r.url; }
 
     return `
-      <a class="resource-row" href="${esc(r.url)}" target="_blank" rel="noopener noreferrer" data-id="${r.id}" style="animation-delay:${i * 0.04}s">
+      <div class="resource-row" data-id="${r.id}" style="animation-delay:${i * 0.04}s" role="button" tabindex="0">
         <div class="row-title">
           <span class="row-icon">${r.icon}</span>${esc(title)}
         </div>
@@ -195,7 +235,7 @@ function render() {
           </span>
         </div>
         <span class="row-badge">${badge}</span>
-      </a>
+      </div>
     `;
   }).join('');
 
@@ -227,12 +267,42 @@ function bindEvents() {
       searchInput.focus();
       searchInput.select();
     }
-    if (e.key === 'Escape' && document.activeElement === searchInput) {
-      searchInput.blur();
-      searchInput.value = '';
-      state.searchQuery = '';
-      render();
+    if (e.key === 'Escape') {
+      if (currentResource) {
+        hideDetail();
+      } else if (document.activeElement === searchInput) {
+        searchInput.blur();
+        searchInput.value = '';
+        state.searchQuery = '';
+        render();
+      }
     }
+  });
+
+  // Row click → detail modal
+  document.getElementById('resourceList').addEventListener('click', (e) => {
+    const row = e.target.closest('.resource-row');
+    if (!row) return;
+    const id = parseInt(row.dataset.id);
+    const r = RESOURCES.find(x => x.id === id);
+    if (r) showDetail(r);
+  });
+
+  // Keyboard: Enter on focused row
+  document.getElementById('resourceList').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const row = e.target.closest('.resource-row');
+      if (!row) return;
+      const id = parseInt(row.dataset.id);
+      const r = RESOURCES.find(x => x.id === id);
+      if (r) showDetail(r);
+    }
+  });
+
+  // Modal close
+  document.getElementById('modalClose').addEventListener('click', hideDetail);
+  document.getElementById('detailModal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) hideDetail();
   });
 
   document.getElementById('filterTags').addEventListener('click', (e) => {
